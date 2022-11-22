@@ -33,6 +33,10 @@ function RightMenu(props) {
   } else {
     return (
       <Menu mode={props.mode}>
+        {/* 2022.11.21 : 상품등록 메뉴 추가 */}
+        <Menu.Item key="upload">
+          <a href="/product/upload">Upload</a>
+        </Menu.Item>
         <Menu.Item key="logout">
           <a onClick={logoutHandler}>Logout</a>
         </Menu.Item>

@@ -1,0 +1,10 @@
+.ant-input, .ant-select, textarea{
+    margin-bottom: 1rem;
+}
+.btnGroup {
+    text-align: center;
+}
+.selectBox {
+    display: inline-flex;
+    width: 100%;
+}

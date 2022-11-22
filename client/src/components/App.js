@@ -6,7 +6,10 @@ import LandingPage from "./views/LandingPage/LandingPage.js";
 import LoginPage from "./views/LoginPage/LoginPage.js";
 import RegisterPage from "./views/RegisterPage/RegisterPage.js";
 import NavBar from "./views/NavBar/NavBar";
-import Footer from "./views/Footer/Footer"
+import Footer from "./views/Footer/Footer";
+
+//2022.11.21 이미지 업로드 라우터 추가
+import UploadProdectPage from './views/UploadProductPage/UploadProductPage';
 
 //null   Anyone Can go inside
 //true   only logged in user can go inside
@@ -21,6 +24,8 @@ function App() {
           <Route exact path="/" component={Auth(LandingPage, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
+          {/* 2022.11.21 상품등록 라우터 추가 (true : 로그인 한 사람만 접근가능)*/}
+          <Route exact path="/product/upload" component={Auth(UploadProdectPage, true)} />
         </Switch>
       </div>
       <Footer />
