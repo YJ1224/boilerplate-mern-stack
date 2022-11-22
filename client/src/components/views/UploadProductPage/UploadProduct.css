@@ -1,5 +1,9 @@
-.ant-input, .ant-select, textarea{
+.ant-input, .ant-select, form textarea.ant-input{
+    margin-top: 0.3rem;
     margin-bottom: 1rem;
+}
+form textarea.ant-input{
+    min-height: 200px;
 }
 .btnGroup {
     text-align: center;

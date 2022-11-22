@@ -35,6 +35,8 @@ app.use(cookieParser());
 
 app.use('/api/users', require('./routes/users'));
 
+//2022.11.22 : 파일업로드 기능 추가
+app.use('/api/product', require('./routes/product'));
 
 //use this to show the image you have in node js server to client (react js)
 //https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client

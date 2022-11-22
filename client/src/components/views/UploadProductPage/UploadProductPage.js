@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import {Typography, Button, Form, Input, Select, Option} from 'antd';
-
+//import { useNavigate } from 'react-router-dom'
 //2022.11.21 : css 파일 import
-import './UploadProduct.css'
+import "./UploadProduct.css";
+
+//2022.11.22 : 파일 업로드(DropZone) 컴포넌트 import
+import FileUpload from "../../utils/FileUpload";
+import Axios from "axios";
+
 const {Title} = Typography;
 const {TextArea} = Input;
 
-function UploadProdectPage() {
+function UploadProdectPage(props) {
     const [productImages, setProductImages] = useState([]); //상품이미지 
     const [productTitle, setProductTitle] = useState(""); //상품명
     const [description, setDescription] = useState(""); //상품설명
@@ -93,26 +98,69 @@ function UploadProdectPage() {
         setClassification1(event)
     }
 
-    //상품분류 1차 onChange
+    //상품분류 2차 onChange
     const productItem2ChangeHandler = (event) => {
-        setClassification2(event.currentTarget.value)
+        setClassification2(event)
     }
 
+    //2022.11.22 : FileUpload 자식컴포넌트에서 전달받은 이미지파일 state 저장
+    const uploadImages = (newImages) => {
+        console.log(newImages)
+        setProductImages(newImages);
+    }
+
+    //2022.11.22 : 상품 등록 api 연동
+    const submitHandler = (event) => {
+        
+        event.preventDefault(); // 새로고침 방지
+        console.log('aa')
+        //let navigate = useNavigate();
+        //데이터 유효성 체크
+        if(!productImages || !productTitle || !description || !productPrice
+            || !classification1 || !classification2){
+                return alert("모든 정보를 입력 해 주세요.");
+        }
+
+        //상품 데이터 json 담기
+        const body = {
+            writer: props.user.userData.email, //로그인 한 유저 이메일
+            title : productTitle, //상품명
+            description : description, //상품설명
+            price : productPrice, //상품가격
+            images : productImages, //상품이미지
+            classification1 : classification1, //상품 1차 분류
+            classification2 : classification2 //상품 2차 분류
+
+        }
+        //api 연동
+        Axios.post("/api/product", body)
+            .then(res => {
+                if(res.data.success){
+                    alert("상품 등록이 완료 되었습니다.");
+                    //navigate("/");
+                }else{
+                    alert("상품 등록이 실패 하였습니다.")
+                }
+            })
+
+    }
     return (
         <div style={{ maxWidth: '700px', margin : '2rem auto'}}>
             <div style={{textAlign: 'center', marginBottom: '2rem'}}>
                 <Title level={2}>상품 업로드</Title>
             </div>
 
-            <Form>
-                {/* DropZone 영역 */}
+            <Form onSubmit={submitHandler} >
+                {/* 파일 업로드(DropZone) 컴포넌트*/}
+                <FileUpload refreshFunction={uploadImages}/>
 
-                <label>상품이름</label>
+                <label>상품 이름</label>
                 <Input onChange={titleChangeHandler} value={productTitle}/>
-                <label>상품설명</label>
+                <label>상품 설명</label>
                 <TextArea onChange={descriptionChangeHandler} value={description}/>
-                <label>상품가격(원)</label>
+                <label>상품 가격(원)</label>
                 <Input value={productPrice}/>
+                <label>상품 분류</label>
                 <div className="selectBox">
                     <Select value={classification1} onChange={productItem1ChangeHandler}>
                         {productItem1.map((item,index) => (
@@ -127,12 +175,12 @@ function UploadProdectPage() {
                 </div>
             
                 <div className="btnGroup">
-                    <Button>
+                    <Button type="submit">
                         확인
                     </Button>
-                    <Button >
+                    {/* <Button type="button">
                         <a href="/">취소</a>
-                    </Button>
+                    </Button> */}
                 </div>
 
             </Form>
