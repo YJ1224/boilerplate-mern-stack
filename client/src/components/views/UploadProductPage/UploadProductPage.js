@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import {Typography, Button, Form, Input, Select, Option} from 'antd';
+import {Typography, Button, Form, Input, Select} from 'antd';
 //import { useNavigate } from 'react-router-dom'
-//2022.11.21 : css 파일 import
-import "./UploadProduct.css";
+//2022.11.21 : css 파일 import (클래스 중첩 방지를 위해 css module 사용)
+import styles from "./UploadProduct.module.css";
 
 //2022.11.22 : 파일 업로드(DropZone) 컴포넌트 import
 import FileUpload from "../../utils/FileUpload";
-import Axios from "axios";
+import axios from "axios";
 
 const {Title} = Typography;
 const {TextArea} = Input;
@@ -105,25 +105,21 @@ function UploadProdectPage(props) {
 
     //2022.11.22 : FileUpload 자식컴포넌트에서 전달받은 이미지파일 state 저장
     const uploadImages = (newImages) => {
-        console.log(newImages)
         setProductImages(newImages);
     }
 
     //2022.11.22 : 상품 등록 api 연동
     const submitHandler = (event) => {
-        
         event.preventDefault(); // 새로고침 방지
-        console.log('aa')
         //let navigate = useNavigate();
         //데이터 유효성 체크
         if(!productImages || !productTitle || !description || !productPrice
             || !classification1 || !classification2){
                 return alert("모든 정보를 입력 해 주세요.");
         }
-
         //상품 데이터 json 담기
         const body = {
-            writer: props.user.userData.email, //로그인 한 유저 이메일
+            writer: props.user.userData._id, //로그인 한 유저 이메일
             title : productTitle, //상품명
             description : description, //상품설명
             price : productPrice, //상품가격
@@ -132,8 +128,10 @@ function UploadProdectPage(props) {
             classification2 : classification2 //상품 2차 분류
 
         }
+        
+        console.log(JSON.stringify(body))
         //api 연동
-        Axios.post("/api/product", body)
+        axios.post("/api/product/registration", body)
             .then(res => {
                 if(res.data.success){
                     alert("상품 등록이 완료 되었습니다.");
@@ -144,6 +142,7 @@ function UploadProdectPage(props) {
             })
 
     }
+
     return (
         <div style={{ maxWidth: '700px', margin : '2rem auto'}}>
             <div style={{textAlign: 'center', marginBottom: '2rem'}}>
@@ -155,13 +154,13 @@ function UploadProdectPage(props) {
                 <FileUpload refreshFunction={uploadImages}/>
 
                 <label>상품 이름</label>
-                <Input onChange={titleChangeHandler} value={productTitle}/>
+                <Input type="text" onChange={titleChangeHandler} value={productTitle}/>
                 <label>상품 설명</label>
                 <TextArea onChange={descriptionChangeHandler} value={description}/>
                 <label>상품 가격(원)</label>
-                <Input value={productPrice}/>
+                <Input type="number" onChange={productPriceChangeHandler} value={productPrice}/>
                 <label>상품 분류</label>
-                <div className="selectBox">
+                <div className={styles.selectBox}>
                     <Select value={classification1} onChange={productItem1ChangeHandler}>
                         {productItem1.map((item,index) => (
                             <option key={item.key} value={item.key}>{item.value}</option>
@@ -174,13 +173,13 @@ function UploadProdectPage(props) {
                     </Select>
                 </div>
             
-                <div className="btnGroup">
-                    <Button type="submit">
+                <div className={styles.btnGroup}>
+                    <button type="submit">
                         확인
-                    </Button>
-                    {/* <Button type="button">
+                    </button>
+                    <button type="button">
                         <a href="/">취소</a>
-                    </Button> */}
+                    </button>
                 </div>
 
             </Form>

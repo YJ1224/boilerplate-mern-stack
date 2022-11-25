@@ -39,7 +39,8 @@ router.post('/image',(req, res) => {
 });
 
 //2022.11.22 : 상품 등록 API
-router.post('/',(req, res) => {
+router.post('/registration',(req, res) => {
+    console.log(req)
     //전달받은 데이터 몽고 DB에 저장
     const product = new Product(req.body);
     product.save((err) => {
