@@ -40,7 +40,6 @@ router.post('/image',(req, res) => {
 
 //2022.11.22 : 상품 등록 API
 router.post('/registration',(req, res) => {
-    console.log(req)
     //전달받은 데이터 몽고 DB에 저장
     const product = new Product(req.body);
     product.save((err) => {
@@ -48,4 +47,27 @@ router.post('/registration',(req, res) => {
         return res.status(200).json({ success: true})
     });
 });
+
+//2022.11.25 : 등록된 상품 조회 API
+router.post('/products', (req, res) => {
+    /*  2022.11.25
+        1. string으로 받았을 경우 형변환 
+        2. limit의 값이 없을 경우 8이 default
+    */
+    let limit = req.body.limit ? parseInt(req.body.limit) : 8; 
+    /*  2022.11.25
+        1. string으로 받았을 경우 형변환 
+        2. skip의 값이 없을 경우 0이 default
+    */
+    let skip = req.body.skip ? parseInt(req.body.skip) : 0; 
+    //product 콜렉션에 있는 모든정보 select
+    Product.find()
+    .populate("write") //ID를 이용해서 유저의 모든정보를 가져오기 위해
+    .limit(limit) //2022.11.25 LIMIT : 데이터를 몇개씩 가져올건지 지정하기 위해
+    .skip(skip) //2022.11.25 SKIP : 어디서부터 데이터를 가져올지 위치 지정(페이징 ?)
+    .exec((err, productInfo) => {
+        if(err) return res.status(400).json({ success: false, err})
+        return res.status(200).json({ success: true, productInfo, postSize: productInfo.length})
+    })
+})
 module.exports = router;

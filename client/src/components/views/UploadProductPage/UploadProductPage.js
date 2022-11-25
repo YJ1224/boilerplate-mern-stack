@@ -18,6 +18,7 @@ function UploadProdectPage(props) {
     const [productPrice, setProductPrice] = useState(0); //상품가격
     const [classification1, setClassification1] = useState(1); //상품분류 (1차)
     const [classification2, setClassification2] = useState(1); //상품분류 (2차)
+    const [registrationCount, setRegistrationCount] = useState(0) //상품갯수
 
     //상품분류 array로 정의(1depth)
     const productItem1 = [
@@ -108,6 +109,9 @@ function UploadProdectPage(props) {
         setProductImages(newImages);
     }
 
+    const registrationCountHandler = (event) => {
+        setRegistrationCount(event.currentTarget.value);
+    }
     //2022.11.22 : 상품 등록 api 연동
     const submitHandler = (event) => {
         event.preventDefault(); // 새로고침 방지
@@ -125,11 +129,9 @@ function UploadProdectPage(props) {
             price : productPrice, //상품가격
             images : productImages, //상품이미지
             classification1 : classification1, //상품 1차 분류
-            classification2 : classification2 //상품 2차 분류
-
+            classification2 : classification2,  //상품 2차 분류
+            sold : registrationCount //상품 등록 갯수
         }
-        
-        console.log(JSON.stringify(body))
         //api 연동
         axios.post("/api/product/registration", body)
             .then(res => {
@@ -172,7 +174,8 @@ function UploadProdectPage(props) {
                         ))}
                     </Select>
                 </div>
-            
+                <label>상품 등록 갯수</label>
+                <Input type="number" onChange={registrationCountHandler} value={registrationCount}/>
                 <div className={styles.btnGroup}>
                     <button type="submit">
                         확인
