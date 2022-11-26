@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {Typography, Button, Form, Input, Select} from 'antd';
-//import { useNavigate } from 'react-router-dom'
+
 //2022.11.21 : css 파일 import (클래스 중첩 방지를 위해 css module 사용)
 import styles from "./UploadProduct.module.css";
 
@@ -115,7 +115,6 @@ function UploadProdectPage(props) {
     //2022.11.22 : 상품 등록 api 연동
     const submitHandler = (event) => {
         event.preventDefault(); // 새로고침 방지
-        //let navigate = useNavigate();
         //데이터 유효성 체크
         if(!productImages || !productTitle || !description || !productPrice
             || !classification1 || !classification2){
@@ -137,7 +136,7 @@ function UploadProdectPage(props) {
             .then(res => {
                 if(res.data.success){
                     alert("상품 등록이 완료 되었습니다.");
-                    //navigate("/");
+                    props.history.push('/');
                 }else{
                     alert("상품 등록이 실패 하였습니다.")
                 }

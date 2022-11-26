@@ -49,6 +49,7 @@ router.post('/registration',(req, res) => {
 });
 
 //2022.11.25 : 등록된 상품 조회 API
+//2022.11.26 : 필터 추가
 router.post('/products', (req, res) => {
     /*  2022.11.25
         1. string으로 받았을 경우 형변환 
@@ -59,15 +60,51 @@ router.post('/products', (req, res) => {
         1. string으로 받았을 경우 형변환 
         2. skip의 값이 없을 경우 0이 default
     */
-    let skip = req.body.skip ? parseInt(req.body.skip) : 0; 
-    //product 콜렉션에 있는 모든정보 select
-    Product.find()
-    .populate("write") //ID를 이용해서 유저의 모든정보를 가져오기 위해
-    .limit(limit) //2022.11.25 LIMIT : 데이터를 몇개씩 가져올건지 지정하기 위해
-    .skip(skip) //2022.11.25 SKIP : 어디서부터 데이터를 가져올지 위치 지정(페이징 ?)
-    .exec((err, productInfo) => {
-        if(err) return res.status(400).json({ success: false, err})
-        return res.status(200).json({ success: true, productInfo, postSize: productInfo.length})
-    })
+    let skip = req.body.skip ? parseInt(req.body.skip) : 0;
+    /*
+        2022.11.26 input 검색을 위해 추가
+    */
+    let term = req.body.search;
+
+    //2022.11.26 : 필터 조건 추가
+    let findArgs = {};
+    for(let key in req.body.filters){
+        if(req.body.filters[key].length > 0){
+            if(key === 'price'){  //2022.11.26 : 가격 범위 추가로 인해 조건 추가
+                findArgs[key] = {
+                    $gte : req.body.filters[key][0], //greater than equal
+                    $lte : req.body.filters[key][1] //less then equal
+                }
+            }else{
+                findArgs[key] = req.body.filters[key];
+            }
+            
+        }
+    }
+    if(term) {
+        //product 콜렉션에 있는 모든정보 select
+        Product.find(findArgs)
+        .find({ $text : { $search: term }}) 
+        .populate("write") //ID를 이용해서 유저의 모든정보를 가져오기 위해
+        .limit(limit) //2022.11.25 LIMIT : 데이터를 몇개씩 가져올건지 지정하기 위해
+        .skip(skip) //2022.11.25 SKIP : 어디서부터 데이터를 가져올지 위치 지정(페이징 ?)
+        .exec((err, productInfo) => {
+            if(err) return res.status(400).json({ success: false, err})
+            return res.status(200).json({ success: true, productInfo, postSize: productInfo.length})
+        })
+        
+
+    }else{
+        //product 콜렉션에 있는 모든정보 select
+        Product.find(findArgs)
+        .populate("write") //ID를 이용해서 유저의 모든정보를 가져오기 위해
+        .limit(limit) //2022.11.25 LIMIT : 데이터를 몇개씩 가져올건지 지정하기 위해
+        .skip(skip) //2022.11.25 SKIP : 어디서부터 데이터를 가져올지 위치 지정(페이징 ?)
+        .exec((err, productInfo) => {
+            if(err) return res.status(400).json({ success: false, err})
+            return res.status(200).json({ success: true, productInfo, postSize: productInfo.length})
+        })
+    }
+    
 })
 module.exports = router;

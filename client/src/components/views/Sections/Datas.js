@@ -9,7 +9,7 @@
 ]
 
 //상품분류 array로 정의(2depth)
-const productItem2 = [
+/*const productItem2 = [
     [
         {key : 1, value : '코트'},
         {key : 2, value : '가디건'},
@@ -54,9 +54,42 @@ const productItem2 = [
         {key : 4, value : '반지'}
     ]
 
-]
+]*/
 
+const price = [
+    {
+        "key" : 0,
+        "name" : "전체",
+        "array" : []
+    },
+    {
+        "key" : 1,
+        "name" : "0원 ~ 30,000원",
+        "array" : [0, 30000]
+    },
+    {
+        "key" : 2,
+        "name" : "30,000원 ~ 50,000원",
+        "array" : [30000,50000]
+    },
+    {
+        "key" : 3,
+        "name" : "50,000원 ~ 80,000원",
+        "array" : [50000,80000]
+    },
+    {
+        "key" : 4,
+        "name" : "80,000원 ~ 100,000원",
+        "array" : [80000,100000]
+    },
+    {
+        "key" : 5,
+        "name" : "100,000원 이상",
+        "array" : [100000,1000000]
+    },
+
+]
 export {
     productItem1,
-    productItem2
+    price
 }

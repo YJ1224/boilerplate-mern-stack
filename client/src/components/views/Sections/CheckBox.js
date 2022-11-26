@@ -23,17 +23,18 @@ function CheckBox(props) {
     const renderCheckboxLists = () => props.productItem1 && props.productItem1.map((item, index) =>(
         //2022.11.25 : React.Fragment (DOM에 별도의 노드를 추가하지 않고 여러 자식을 그룹화하기 위해)
         <React.Fragment key={index}>
-            <Checkbox onChange={() => checkBoxHandler(item.key)}
+            <Checkbox onChange={() => checkBoxHandler(item.key)} 
             checked={checked.indexOf(item.key) === -1 ? false : true}
+            style={{minHeight:'110px'}}
             />
-                <span>{item.value}</span>
+            <span style={{marginLeft:'5px', marginRight:'5px'}}>{item.value}</span>
             
         </React.Fragment>
     ))
     return (
         <div>
             <Collapse defaultActiveKey={['1']}>
-                <Panel header="상품 대분류" key="1">
+                <Panel header="상품 분류" key="1">
                     {renderCheckboxLists()}
                 </Panel>
                 
