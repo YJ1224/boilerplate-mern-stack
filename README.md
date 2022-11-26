@@ -1,3 +1,5 @@
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FYJ1224%2Fboilerplate-mern-stack&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+
 ### 프로젝트 소개
   <img width="50%" src="https://user-images.githubusercontent.com/48265181/203928933-dd63891d-e7ee-4f78-a073-9dd93502d1cb.png"/> 
   
