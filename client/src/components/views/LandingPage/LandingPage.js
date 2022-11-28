@@ -111,7 +111,7 @@ function LandingPage() {
     const renderCards = products.map((item,index) => {
         return <Col lg={6} md={8} sm={24} key={index}>
             <Card 
-                cover={<ImageSilder images={item.images}/>}
+                cover={<a href={'/product/'+item._id}><ImageSilder images={item.images}/></a>}
             >
             <Meta 
                 title={item.title}

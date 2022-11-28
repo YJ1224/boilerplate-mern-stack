@@ -26,13 +26,23 @@ const userSchema = mongoose.Schema({
         type:Number,
         default: 0 
     },
+    //2022.11.28 : 장바구니 담기 시 해당 데이터를 저장하기 위해 필드추가
+    cart : {
+        type: Array,
+        default: []
+    },
+    history : {
+        type: Array,
+        default: []
+    },
     image: String,
     token : {
         type: String,
     },
     tokenExp :{
         type: Number
-    }
+    },
+
 })
 
 

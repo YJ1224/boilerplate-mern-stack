@@ -107,4 +107,17 @@ router.post('/products', (req, res) => {
     }
     
 })
+
+//2022.11.28 : 상품상세페이지를 위한 유니크한 상품의 모든 정보 가져오는 API 생성
+router.get('/productId',(req, res) => {
+    let type = req.query.type
+    let productId = req.query.id
+
+    Product.find({_id:productId})
+        .populate('writer')
+        .exec((err,product) => {
+            if(err) return res.status(400).send(err)
+            return res.status(200).send({ success: true, product})
+        })
+});
 module.exports = router;

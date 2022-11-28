@@ -4,6 +4,8 @@ import {
     REGISTER_USER,
     AUTH_USER,
     LOGOUT_USER,
+    //2022.11.28 : 장바구니 담기 액션 추가
+    ADD_TO_CART
 } from './types';
 import { USER_SERVER } from '../components/Config.js';
 
@@ -46,4 +48,18 @@ export function logoutUser(){
         payload: request
     }
 }
+
+//2022.11.28 : 장바구니 담기 액션 추가
+export function addToCart(id){
+    let body = {
+        productId : id
+    }
+    const request = axios.post(`${USER_SERVER}/addToCart`,body)
+    .then(response => console.log(response.data));
+    return {
+        type: ADD_TO_CART,
+        payload: request
+    }
+}
+
 
