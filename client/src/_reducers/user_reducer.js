@@ -4,7 +4,13 @@ import {
     AUTH_USER,
     LOGOUT_USER,
     //2022.11.28 : 장바구니 담기 액션 추가
-    ADD_TO_CART
+    ADD_TO_CART,
+    //2022.11.29 : 장바구니 정보 가져오는 액션 추가
+    GET_CART_ITEMS,
+    //2022.11.29 : 장바구니 삭제 액션 추가
+    REMOVE_CART_ITEM
+    
+    
 } from '../_actions/types';
  
 
@@ -27,6 +33,22 @@ export default function(state={},action){
                     cart : action.payload
                 }
             } 
+        //2022.11.29 : 장바구니 정보 가져오는 액션 추가
+        case GET_CART_ITEMS : 
+            return {
+                ...state, 
+                cartDetail : action.payload
+            }
+        //2022.11.29 : 장바구니 삭제 액션 추가
+        case REMOVE_CART_ITEM : 
+            return {
+                ...state, 
+                cartDetail : action.payload.productInfo,
+                userData: {
+                    ...state.userData,
+                    cart : action.payload.cart
+                }
+            }
         default:
             return state;
     }

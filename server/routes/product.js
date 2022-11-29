@@ -111,13 +111,21 @@ router.post('/products', (req, res) => {
 //2022.11.28 : 상품상세페이지를 위한 유니크한 상품의 모든 정보 가져오는 API 생성
 router.get('/productId',(req, res) => {
     let type = req.query.type
-    let productId = req.query.id
+    let productIds = req.query.id
 
-    Product.find({_id:productId})
+    //2022.11.29 : 장바구니 같은 경우에는 데이터가 하나가 아니기 때문에 array처리
+    if(type === "array") {
+        let ids = req.query.id.split(',')
+        productIds = ids.map(item => {
+            return item
+        })
+    }
+    //2022.11.29 : 장바구니 같은 경우에는 데이터가 하나가 아니기 때문에 $in 사용
+    Product.find({ _id: { $in : productIds } })
         .populate('writer')
         .exec((err,product) => {
             if(err) return res.status(400).send(err)
-            return res.status(200).send({ success: true, product})
+            return res.status(200).send(product)
         })
 });
 module.exports = router;

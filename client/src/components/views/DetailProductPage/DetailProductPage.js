@@ -12,14 +12,11 @@ function DetailProductPage(props) {
     const productId = props.match.params.productId; //상품 ID
     const [product, setProduct] = useState({}); //조회된 상품상세정보
     useEffect(() => {
-        axios.get('/api/product/productId?id='+productId)
+        axios.get('/api/product/productId?id='+productId+"&type=single")
         .then(res => {
-            if(res.data.success){
-                setProduct(res.data.product[0]);
-            }else{
-                alert("상품 정보를 가져오지 못햇습니다.")
-            }
+            setProduct(res.data[0]);
         })
+        .catch(err => alert("상품 정보를 가져오지 못햇습니다."))
     },[])
     return (
         <div style={{width:'100%', padding: '3rem 4rem'}}>
