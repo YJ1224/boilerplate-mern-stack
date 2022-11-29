@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Empty } from 'antd';
 //2022.11.29 : 카트 정보 가져오는 actions
 import {getCartItems, removeCartItem} from "../../../_actions/user_actions"
 //2022.11.29 : 카트 UI 컴포넌트 가져오기
@@ -8,6 +9,7 @@ import UserCardBlock from './Sections/UserCardBlock'
 function CartPage(props) {
     const [totalPrice, setTotalPrice] = useState(0)
     const dispatch = useDispatch();
+    const [showTotal, setShowTotal] = useState(false)
     //2022.11.29 : 상품상세페이지에 필요한 데이터 가져오기
     useEffect(() => {
         let cartItems = [];
@@ -32,13 +34,16 @@ function CartPage(props) {
         })
 
         setTotalPrice(total)
+        setShowTotal(true)
     }
 
     //2022.11.29 : 상품삭제 기능 추가
     let removeFromCart = (productId) => {
         dispatch(removeCartItem(productId))
         .then(res => {
-            
+            if(res.payload.productInfo.length <= 0){
+                setShowTotal(false)
+            }
         })
     }
     return (
@@ -49,9 +54,13 @@ function CartPage(props) {
                 removeItem={removeFromCart}
                 />
             </div>
-            <div style={{marginTop:'3rem'}}>
-                <h2>총 가격 : {totalPrice} 원</h2>
-            </div>
+            {
+                showTotal ?
+                    <div style={{marginTop:'3rem'}}>
+                        <h2>총 가격 : {totalPrice} 원</h2>
+                    </div>
+                : <Empty style={{marginTop:'3rem'}} description={false}/>
+            }
         </div>
     )
 }
